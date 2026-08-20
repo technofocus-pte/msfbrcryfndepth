@@ -1,44 +1,18 @@
-## Usecase 1- Build and Deploy the Contoso Chef Application with Rayfin
+## Usecase 1 - Build and Deploy the Contoso Chef Application with Rayfin
 
-**Scenario**
+### Scenario
 
-Contoso Chef is a modern recipe-sharing platform that enables food
-enthusiasts to discover recipes, create and manage their own culinary
-content, upload recipe images, and collaborate with other users through
-likes and comments. To accelerate application development while
-minimizing infrastructure complexity, Contoso Chef leverages **Rayfin on
-Microsoft Fabric** to provide a fully managed backend, authentication,
-database services, and application hosting.
+Contoso Chef is a modern recipe-sharing platform that enables food enthusiasts to discover recipes, create and manage their own culinary content, upload recipe images, and collaborate with other users through likes and comments. To accelerate application development while minimizing infrastructure complexity, Contoso Chef leverages **Rayfin on Microsoft Fabric** to provide a fully managed backend, authentication, database services, and application hosting.
 
-As a developer, your goal is to deploy the Contoso Chef application to
-Microsoft Fabric, connect it to a managed Rayfin backend, and explore
-how Rayfin simplifies the process of building, deploying, and
-maintaining scalable full-stack applications. Throughout this lab, you
-will provision Fabric resources, deploy the application, validate
-Microsoft SSO authentication, create recipes, and learn how to update
-and redeploy application components efficiently.
+As a developer, your goal is to deploy the Contoso Chef application to Microsoft Fabric, connect it to a managed Rayfin backend, and explore how Rayfin simplifies the process of building, deploying, and maintaining scalable full-stack applications. Throughout this lab, you will provision Fabric resources, deploy the application, validate Microsoft SSO authentication, create recipes, and learn how to update and redeploy application components efficiently.
 
-**Introduction**
+### Introduction
 
-Building modern applications often requires developers to manage
-multiple services, including authentication, databases, APIs, storage,
-and application hosting. Rayfin simplifies this process by providing a
-managed backend platform that integrates directly with Microsoft Fabric,
-enabling developers to focus on application functionality rather than
-infrastructure management.
+Building modern applications often requires developers to manage multiple services, including authentication, databases, APIs, storage, and application hosting. Rayfin simplifies this process by providing a managed backend platform that integrates directly with Microsoft Fabric, enabling developers to focus on application functionality rather than infrastructure management.
 
-In this lab, you will deploy the **Contoso Chef** sample application
-using Rayfin on Microsoft Fabric. You will create a Fabric workspace,
-configure the development environment, deploy a managed backend, launch
-the application, and explore its core recipe-sharing features. You will
-also learn how local development and production deployments can
-seamlessly share the same backend services, enabling rapid application
-development and deployment workflows. The Contoso Chef application
-demonstrates how Microsoft Fabric and Rayfin can be used together to
-build fast, secure, and resilient cloud-native applications with
-Microsoft Entra authentication and managed data services.
+In this lab, you will deploy the **Contoso Chef** sample application using Rayfin on Microsoft Fabric. You will create a Fabric workspace, configure the development environment, deploy a managed backend, launch the application, and explore its core recipe-sharing features. You will also learn how local development and production deployments can seamlessly share the same backend services, enabling rapid application development and deployment workflows. The Contoso Chef application demonstrates how Microsoft Fabric and Rayfin can be used together to build fast, secure, and resilient cloud-native applications with Microsoft Entra authentication and managed data services.
 
-**Objectives**
+### Objectives
 
 - Create and configure a Microsoft Fabric workspace.
 
@@ -48,576 +22,506 @@ Microsoft Entra authentication and managed data services.
 
 - Install project dependencies and authenticate with Rayfin.
 
-- Deploy a managed backend and application using Rayfin on Microsoft
-  Fabric.
+- Deploy a managed backend and application using Rayfin on Microsoft Fabric.
 
-- Verify the deployment and access the application through Microsoft
-  Entra SSO.
+- Verify the deployment and access the application through Microsoft Entra SSO.
 
-- Run the application locally while connecting to the deployed Fabric
-  backend.
+- Run the application locally while connecting to the deployed Fabric backend.
 
 - Create, edit, and manage recipes within the Contoso Chef application.
 
-- Upload media assets and interact with recipe content through comments
-  and likes.
+- Upload media assets and interact with recipe content through comments and likes.
 
-- Redeploy frontend and database updates using Rayfin deployment
-  commands.
+- Redeploy frontend and database updates using Rayfin deployment commands.
 
-- Understand how Rayfin accelerates full-stack application development
-  on Microsoft Fabric.
+- Understand how Rayfin accelerates full-stack application development on Microsoft Fabric.
 
-**Prerequisites**
+
+### Prerequisites
 
 Before starting, make sure you have:
 
-1.  Node.js 20 or later installed. Check with "node -v" in a terminal.
-    If it's missing or older, install it from nodejs.org.
+1. Node.js 20 or later installed. Check with "node -v" in a terminal. If it's missing or older, install it from nodejs.org.
 
-2.  Git installed, to clone the sample repository.
+1. Git installed, to clone the sample repository.
 
-3.  Access to a Microsoft Fabric workspace where you have permission to
-    create an app (ask your Fabric admin if unsure).
+1. Access to a Microsoft Fabric workspace where you have permission to create an app (ask your Fabric admin if unsure).
 
-4.  A terminal / command-line application (PowerShell, Terminal, etc.).
+1. A terminal / command-line application (PowerShell, Terminal, etc.).
 
  ## Prerequisites
 
-- **GitHub Account: You are expected to have your own GitHub login
-  credentials.  
-  If you do not have an account, please create one by visiting:  
-  +++https://github.com/signup?user_email=&source=form-home-signup+++**
+
+- **GitHub Account: You are expected to have your own GitHub login credentials. If you do not have an account, please create one by visiting: +++https://github.com/signup?user_email=&source=form-home-signup+++**
+
 
 ## Task 0: Create a GitHub account
 
-In this task, you create a new **Github account** with the same tenant
-credentials that you have used in this lab.
+In this task, you create a new **Github account** with the same tenant credentials that you have used in this lab.
 
-1.  Navigate to the GitHub with this link
-    +++https://github.com/+++ and click on **Sign up** to proceed
-    further.
-  ![](./mediaimga1.png)
+1. Navigate to the GitHub with this link +++https://github.com/+++ and click on **Sign up** to proceed further.
 
-2.  Now, to create a new GitHub account, enter
-    the **email**, **password** and a unique **username** and click
-    on **Continue** button.
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/imga1.png)
 
-    ![](./mediaimga2.png)
+1. Now, to create a new GitHub account, enter the +++email+++, **password** and a unique **username** and click on **Continue** button.
 
-4.  Start the **verification** **puzzle** by following the instruction
-    on the screen. Click on **Submit.**
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/imga2.png)
 
-5.  Enter the **verification** **code** you've received on your mail.
+1. Start the **verification** **puzzle** by following the instruction on the screen. Click on **Submit.**
 
-   ![](./mediaimga3.png)
-6.  Now, with your credentials sign-in to GitHub and click on **Sign in.**
+1. Enter the +++verification+++ **code** you've received on your mail.
 
-   ![](./mediaimga4.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/imga3.png)
 
-7.  You have successfully created a new account on GitHub.
+1. Now, with your credentials sign-in to GitHub and click on **Sign in.**
+
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/imga4.png)
+
+1. You have successfully created a new account on GitHub.
+
 
 # Task 1: Create a Fabric workspace
 
-In this task, you create a Fabric workspace. The workspace contains all
-the items needed for this lakehouse tutorial, which includes lakehouse,
-dataflows, Data Factory pipelines, the notebooks, Power BI datasets, and
-reports.
+In this task, you create a Fabric workspace. The workspace contains all the items needed for this lakehouse tutorial, which includes lakehouse, dataflows, Data Factory pipelines, the notebooks, Power BI datasets, and reports.
 
-1.  Open your browser, navigate to the address bar, and type or paste
-    the following URL:
-    +++https://app.fabric.microsoft.com/+++ then press
-    the **Enter** button and sign in with your credentials
+1. Open your browser, navigate to the address bar, and type or paste the following URL: +++https://app.fabric.microsoft.com/+++ then press the **Enter** button and sign in with your credentials
 
-| Credential | Value |
-|---|---|
-| Username | +++@lab.CloudPortalCredential(User1).Username+++ |
-| Password | +++@lab.CloudPortalCredential(User1).Password+++ |
+    | Credential | Value |
+    |---|---|
+    | Username | +++@lab.CloudPortalCredential(User1).Username+++ |
+    | Password | +++@lab.CloudPortalCredential(User1).Password+++ |
 
-![](./media/image1.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image1.png)
 
-> ![](./media/image2.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image2.png)
 
-2.  In the portal, switch to **Fabric** Mode before proceeding to create
-    workspace.
+1. In the portal, switch to **Fabric** Mode before proceeding to create workspace.
 
-![A screenshot of a computer AI-generated content may be
-incorrect.](./media/image3.png)
+    ![A screenshot of a computer AI-generated content may be incorrect.](./media/image3.png)
 
-3.  In the Workspaces pane, click on **+New workspace** tile
+1. In the Workspaces pane, click on **+New workspace** tile
 
-![](./media/image4.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image4.png)
 
-4.  In the **Create a workspace** pane that appears on the right side,
-    enter the following details, and click on the **Apply** button.
+1. In the **Create a workspace** pane that appears on the right side, enter the following details, and click on the **Apply** button.
 
-| Setting | Value |
-|---|---|
-| Name | +++Rayfin-FabricXXXX+++ (**XXXX can be a unique number**) |
-| Advanced | Under **License mode**, select **Fabric** |
-| Default storage format | **Small dataset storage format** |
+    | Setting | Value |
+    |---|---|
+    | Name | +++Rayfin-Fabric@lab.LabInstance.Id+++ |
+    | Advanced | Under **License mode**, select **Fabric** |
+    | Default storage format | **Small dataset storage format** |
 
-![](./media/image5.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image5.png)
 
-![](./media/image6.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image6.png)
 
-![](./media/image7.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image7.png)
 
-5.  Once the workspace loads, copy the URL from the browser address bar.
-    Remove anything after the workspace ID. The URL should look
-    like https://app.fabric.microsoft.com/groups/\<workspace-id\>.
+1. Once the workspace loads, copy the URL from the browser address bar. Remove anything after the workspace ID. The URL should look like https://app.fabric.microsoft.com/groups/*{workspace-id}*.
 
-![](./media/image8.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image8.png)
+
 
 # Task 2: Clone the lab repository
 
-1.  Open your browser, navigate to the address bar, type or paste the
-    following URL:
-    +++https://github.com/technofocus-pte/rayfin-on-microsoft-fabric+++
+1. Open your browser, navigate to the address bar, type or paste the following URL: +++https://github.com/technofocus-pte/rayfin-on-microsoft-fabric+++
 
-> ![](./media/image9.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image9.png)
 
-2.  Click on **fork** to fork the repo. Give unique name to the repo and
-    click on **Create repo** button.
+1. Click on **fork** to fork the repo. Give unique name to the repo and click on **Create repo** button.
 
-> ![](./media/image10.png)
->
-> ![](./media/image11.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image10.png)
 
-3.  In your GitHub repository, click **Code** and then select the
-    **Copy** icon next to the repository URL to copy the clone link for
-    use in the upcoming steps.
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image11.png)
 
-> ![](./media/image12.png)
+1. In your GitHub repository, click **Code** and then select the **Copy** icon next to the repository URL to copy the clone link for use in the upcoming steps.
+
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image12.png)
+
 
 # Task 3: Validate Required Software Setup
 
-1.  In your Windows search box, type Visual Studio, then click
-    on **Visual Studio Code**.
+1. In your Windows search box, type Visual Studio, then click on **Visual Studio Code**.
 
-> ![A screenshot of a computer Description automatically
-> generated](./media/image13.png)
+    ![A screenshot of a computer Description automatically > generated](./media/image13.png)
 
-2.  Launch Visual Studio Code and sign in using the **Sign In** button
-    located in the upper-right corner of the application window.
+1. Launch Visual Studio Code and sign in using the **Sign In** button located in the upper-right corner of the application window.
 
-![](./media/image14.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image14.png)
 
-3.  Click on **Continue with GitHub**
+1. Click on **Continue with GitHub**
 
-![](./media/image15.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image15.png)
 
-4.  On the GitHub sign-in page, enter the provided username or email
-    address and password, then click **Sign in** to authenticate and
-    connect GitHub with Visual Studio Code.
+1. On the GitHub sign-in page, enter the provided username or email address and password, then click **Sign in** to authenticate and connect GitHub with Visual Studio Code.
 
-![](./media/image16.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image16.png)
 
-> ![](./media/image17.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image17.png)
 
-5.  Click **Open** to open the selected repository and begin working in
-    Visual Studio Code.
+1. Click **Open** to open the selected repository and begin working in Visual Studio Code.
 
-![](./media/image18.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image18.png)
 
-6.  In Visual Studio Code, click the **More Actions (⋯)** menu, select
-    **Terminal**, and then choose **New Terminal** to open a new
-    integrated terminal window
+1. In Visual Studio Code, click the **More Actions (⋯)** menu, select **Terminal**, and then choose **New Terminal** to open a new integrated terminal window
 
-> ![](./media/image19.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image19.png)
 
-7.  In the terminal, navigate to the **Labfiles** directory
+1. In the terminal, navigate to the **Labfiles** directory
 
-> ![](./media/image20.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image20.png)
 
-8.  Run the following commands in your terminal and confirm each returns
-    a version number:
+1. Run the following commands in your terminal and confirm each returns a version number:
 
-> **+++node --version+++**
->
-> **+++npm --version+++**
->
-> **+++git --version+++**
->
-> **+++copilot --version+++**
+    `node --version`
+    >
+    `npm --version`
+    >
+    `git --version`
+    >
+    > **+++copilot --version+++**
 
-![](./media/image21.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image21.png)
+
 
 # Task 4: Get the source code
 
-1.  Clone the repository and move into the app's source folder:
+1. Clone the repository and move into the app's source folder:
 
-    +++git clone https://github.com/<youraccount>/rayfin-on-microsoft-fabric.git+++
+    `git clone https://github.com/<youraccount>/rayfin-on-microsoft-fabric.git`
 
-![](./media/image22.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image22.png)
 
-2.  Change the directory
+1. Change the directory
 
-> **+++cd rayfin-on-microsoft-fabric/src+++**
+    `cd rayfin-on-microsoft-fabric/src`
 
-![](./media/image23.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image23.png)
 
-All remaining commands are run from this "src" folder.
+    All remaining commands are run from this "src" folder.
 
-![](./media/image24.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image24.png)
+
 
 # Task 5: Install dependencies
 
-1.  In the integrated terminal, run the following command to install all
-    required project dependencies:
+1. In the integrated terminal, run the following command to install all required project dependencies:
 
-> **+++npm install+++**
+    `npm install`
 
-This downloads all the packages the app needs (React, Vite, Rayfin CLI,
-etc.).
+    This downloads all the packages the app needs (React, Vite, Rayfin CLI, etc.).
 
-![](./media/image25.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image25.png)
 
-2.  In the integrated terminal, run the following command to sign in to
-    Rayfin and authenticate your deployment environment
+1. In the integrated terminal, run the following command to sign in to Rayfin and authenticate your deployment environment
 
-> **+++npx rayfin login+++**
+    `npx rayfin login`
 
-![](./media/image26.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image26.png)
 
-![](./media/image27.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image27.png)
 
-3.  If your account has access to more than one Fabric tenant, pin to
-    the right one:
+1. If your account has access to more than one Fabric tenant, pin to the right one:
 
-> +++npx rayfin login --tenant <tenant-id>+++
+    `npx rayfin login --tenant <tenant-id>`
 
-This opens a browser sign-in prompt — complete it with your Fabric/Entra
-ID credentials.
+    This opens a browser sign-in prompt — complete it with your Fabric/Entra ID credentials.
+
 
 # Task 6: Deploy the backend and the app
 
-1.  After signing in, run the following command to start the deployment
-    process:
+1. After signing in, run the following command to start the deployment process:
 
-2.  In the integrated terminal, run the following command, replacing
-    **\<workspace-id\>** with the **Microsoft Fabric workspace ID** that
-    you saved in Task 1
+1. In the integrated terminal, run the following command, replacing ***{workspace-id}*** with the **Microsoft Fabric workspace ID** that you saved in Task 1
 
-      +++npx rayfin up --workspace-id <workspace-id>+++
+    `npx rayfin up --workspace-id <workspace-id>`
 
-![](./media/image28.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image28.png)
 
-![](./media/image29.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image29.png)
 
-This single command:
+    This single command:
 
-- Provisions a Rayfin item in your Fabric workspace
+    - Provisions a Rayfin item in your Fabric workspace
 
-- Applies the database schema
+    - Applies the database schema
 
-- Builds the Vite frontend (npm run build:fabric)
+    - Builds the Vite frontend (npm run build:fabric)
 
-- Deploys the static site bundle
+    - Deploys the static site bundle
 
-- Writes the live URLs and publishable key into a new .env.fabric file
+    - Writes the live URLs and publishable key into a new .env.fabric file
 
-This can take a few minutes the first time.
+    This can take a few minutes the first time.
 
-![](./media/image30.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image30.png)
 
-3.  Copy the application **URL** and keep it available for use in the
-    next tasks.
 
-![](./media/image31.png)
+1. Copy the application **URL** and keep it available for use in the next tasks.
+
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image31.png)
+
 
 # Task 7: Open and verify the deployed app
 
-1.  Check the deployment status and get the hosting URL:
+1. Check the deployment status and get the hosting URL:
 
-> **+++npx rayfin up status+++**
+    `npx rayfin up status`
 
-![](./media/image32.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image32.png)
 
-Open the printed URL in a browser and sign in with your Microsoft Fabric
-account. On first sign-in, the app automatically imports a 100-recipe
-catalogue into the database (takes about 30 seconds, with a progress
-banner). This "self-seeding" is idempotent, so revisiting later won't
-create duplicates.
+    Open the printed URL in a browser and sign in with your Microsoft Fabric account. On first sign-in, the app automatically imports a 100-recipe catalogue into the database (takes about 30 seconds, with a progress banner). This "self-seeding" is idempotent, so revisiting later won't create duplicates.
 
-> **Note on anonymous access:** At release, unauthenticated (anonymous)
-> access to Fabric data sources is not supported. Every visitor —
-> including the discover page and "unlisted" recipe links — must sign in
-> via Microsoft Fabric SSO.
+    > **Note on anonymous access:** At release, unauthenticated (anonymous)
+    > access to Fabric data sources is not supported. Every visitor —
+    > including the discover page and "unlisted" recipe links — must sign in
+    > via Microsoft Fabric SSO.
 
-1.  Open the Microsoft Fabric portal
-    at +++https://app.fabric.microsoft.com+++.
+1. Open the Microsoft Fabric portal at +++https://app.fabric.microsoft.com+++.
 
-2.  Open the Rayfin_Fabric@lab.LabInstance.Id workspace you created in Exercise 1.
+1. Open the Rayfin_Fabric@lab.LabInstance.Id workspace you created in Exercise 1.
 
-![](./media/image33.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image33.png)
 
-3.  Select **contoso-chef** app
+1. Select **contoso-chef** app
 
-![](./media/image34.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image34.png)
 
-![](./media/image35.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image35.png)
 
-![](./media/image36.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image36.png)
+
 
 # Task 8: Run the app locally against the deployed backend
 
-1.  For local development with hot-reload:
+1. For local development with hot-reload:
 
-> +++npm run dev+++
+    `npm run dev`
 
-This regenerates a .env file from .env.fabric and starts the Vite dev
-server at http://localhost:5173, connected to the same Fabric backend
-you deployed in Step 4. Sign in via the popup that appears.
+    This regenerates a .env file from .env.fabric and starts the Vite dev server at http://localhost:5173, connected to the same Fabric backend you deployed in Step 4. Sign in via the popup that appears.
 
-![](./media/image37.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image37.png)
 
-2.  Copy the local frontend URL shown in the terminal, which should be
-    similar to http://localhost:5173, and open it in a new browser tab.
+1. Copy the local frontend URL shown in the terminal, which should be similar to http://localhost:5173, and open it in a new browser tab.
 
-![](./media/image38.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image38.png)
 
-3.  Select the **Sign in with Microsoft** button, sign in with the same
-    Microsoft account you used for Fabric:
+1. Select the **Sign in with Microsoft** button, sign in with the same Microsoft account you used for Fabric:
 
-    - **Email**: @lab.CloudPortalCredential(User1).Username
 
-    - **TAP**: @lab.CloudPortalCredential(User1).AccessToken
+    - **Email**: +++@lab.CloudPortalCredential(User1).Username+++
 
-![](./media/image39.png)
+    - **TAP**: +++@lab.CloudPortalCredential(User1).AccessToken+++
 
-![](./media/image40.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image39.png)
 
-![](./media/image41.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image40.png)
 
-![](./media/image42.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image41.png)
 
-![](./media/image43.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image42.png)
 
-4.  In the terminal output from the **npx rayfin up** command you ran in
-    Task 6\>Step 3, find the **static hosting URL** printed by the CLI.
-    The URL should look similar
-    to https://\<random-prefix\>.webapp.rayfin….com.
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image43.png)
 
-![](./media/image44.png)
 
-5.  Open the hosting URL in a new browser tab. The app displays the same
-    auth page as your local frontend, including the **Sign in with
-    Microsoft** button, because both use the same Fabric backend.
+1. In the terminal output from the **npx rayfin up** command you ran in Task 6, Step 3, find the **static hosting URL** printed by the CLI. The URL should look similar to https://*{random-prefix}*.webapp.rayfin….com.
 
-![](./media/image44.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image44.png)
 
-![](./media/image45.png)
+1. Open the hosting URL in a new browser tab. The app displays the same auth page as your local frontend, including the **Sign in with Microsoft** button, because both use the same Fabric backend.
 
-![](./media/image46.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image44.png)
+
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image45.png)
+
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image46.png)
+
 
 # Task 9: Explore core features
 
-1.  Browsing the discover page (public recipes) and select My recipes
+1. Browsing the discover page (public recipes) and select My recipes
 
-2.  Then, click **My recipes** in the navigation menu and create your
-    own recipe
+1. Then, click **My recipes** in the navigation menu and create your own recipe
 
-![](./media/image47.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image47.png)
 
-3.  Enter the details for a new recipe of your choice. For this lab, a
-    sample recipe is used to demonstrate the recipe creation process.
+1. Enter the details for a new recipe of your choice. For this lab, a sample recipe is used to demonstrate the recipe creation process.
 
-> **Description**: Fluffy, fool-proof steamed white rice — a simple side
-> that pairs with almost anything.
->
-> **Type**: main (or "side", if that option exists)
->
-> **Cuisine**: Global / Asian
->
-> **Origin country**: (optional — leave blank or pick where you learned
-> it)
->
-> For the ingredients and steps sections further down the form:
->
-> **Ingredients:**
->
-> 1 cup white rice (basmati or jasmine)
->
-> 2 cups water
->
-> 1/2 tsp salt
->
-> 1 tsp butter or oil (optional)
->
-> **Steps:**
+    > **Description**: Fluffy, fool-proof steamed white rice — a simple side
+    > that pairs with almost anything.
+    >
+    > **Type**: main (or "side", if that option exists)
+    >
+    > **Cuisine**: Global / Asian
+    >
+    > **Origin country**: (optional — leave blank or pick where you learned
+    > it)
+    >
+    > For the ingredients and steps sections further down the form:
+    >
+    > **Ingredients:**
+    >
+    > 1 cup white rice (basmati or jasmine)
+    >
+    > 2 cups water
+    >
+    > 1/2 tsp salt
+    >
+    > 1 tsp butter or oil (optional)
+    >
+    > **Steps:**
 
-- Rinse the rice under cold water until it runs clear, to remove excess
-  starch.
 
-- Add rice, water, salt, and butter/oil to a pot; bring to a boil
-  uncovered.
+    - Rinse the rice under cold water until it runs clear, to remove excess starch.
 
-- Once boiling, reduce heat to low, cover tightly, and simmer for 15
-  minutes without lifting the lid.
+    - Add rice, water, salt, and butter/oil to a pot; bring to a boil uncovered.
 
-- Remove from heat and let it rest, covered, for 5 minutes.
+    - Once boiling, reduce heat to low, cover tightly, and simmer for 15 minutes without lifting the lid.
 
-- Fluff with a fork before serving.
+    - Remove from heat and let it rest, covered, for 5 minutes.
 
-![](./media/image48.png)
+    - Fluff with a fork before serving.
 
-![](./media/image49.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image48.png)
 
-![](./media/image50.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image49.png)
 
-4.  Liking and commenting on recipes
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image50.png)
 
-5.  Uploading a cover image when creating/editing a recipe. Browse
-    to **C:\LabFiles\\** on your VM, then select ***SteamredRice*** file
-    and click on **Open** button.
 
-![](./media/image51.png)
+1. Liking and commenting on recipes
 
-![](./media/image52.png)
+1. Uploading a cover image when creating/editing a recipe. Browse to **C:\LabFiles\** on your VM, then select ***SteamredRice*** file and click on **Open** button.
 
-6.  Click **Save recipe**
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image51.png)
 
-![](./media/image53.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image52.png)
 
-![](./media/image54.png)
+1. Click **Save recipe**
+
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image53.png)
+
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image54.png)
+
 
 # Task 10: Redeploying after changes
 
-1.  Deploy the updated backend API metadata and frontend:
+1. Deploy the updated backend API metadata and frontend:
 
-> **+++npx rayfin up+++**
->
-> ![](./media/image55.png)
+    `npx rayfin up`
 
-2.  To redeploy only the frontend (static web application) after making
-    UI changes, run the following command in the integrated terminal
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image55.png)
 
-> +++**npx rayfin up staticapp deploy**+++ \# Redeploy frontend only
->
-> ![](./media/image56.png)
+1. To redeploy only the frontend (static web application) after making UI changes, run the following command in the integrated terminal
 
-3.  To apply only the database schema changes without redeploying other
-    project components, run the following command in the integrated
-    terminal
+    > **+++npx rayfin up staticapp deploy+++** \# Redeploy frontend only
 
-> +++**npx rayfin up db apply**+++ \# Apply schema changes only
->
-> ![](./media/image57.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image56.png)
 
-4.  Open the application using the Hosting URL generated during
-    deployment. After the application loads successfully, click **My
-    recipes** in the navigation menu to access and manage your personal
-    recipes
+1. To apply only the database schema changes without redeploying other project components, run the following command in the integrated terminal
 
-> ![](./media/image58.png)
+    > **+++npx rayfin up db apply+++** \# Apply schema changes only
 
-![](./media/image59.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image57.png)
 
-![](./media/image60.png)
+1. Open the application using the Hosting URL generated during deployment. After the application loads successfully, click **My recipes** in the navigation menu to access and manage your personal recipes
 
-5.  Open the Microsoft Fabric portal
-    at +++https://app.fabric.microsoft.com+++.
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image58.png)
 
-6.  Open
-    the Rayfin\_[Fabric**@lab.LabInstance.Id**](mailto:Fabric@lab.LabInstance.Id) workspace
-    you created in Exercise 1.
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image59.png)
 
-![](./media/image33.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image60.png)
 
-4.  Select **contoso-chef** app
+1. Open the Microsoft Fabric portal at +++https://app.fabric.microsoft.com+++.
 
-![](./media/image34.png)
+1. Open the Rayfin\_+++Fabric@lab.LabInstance.Id+++ workspace you created in Exercise 1.
 
-7.  Click **My recipes** in the navigation menu to access and manage
-    your personal recipes.
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image33.png)
 
-![](./media/image61.png)
+1. Select **contoso-chef** app
+
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image34.png)
+
+1. Click **My recipes** in the navigation menu to access and manage your personal recipes.
+
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image61.png)
+
 
 # Task 11: Create Data agent
 
-1.  Now, click on **RayfinFabricXXX** on the left-sided navigation pane.
+1. Now, click on +++RayfinFabric@lab.LabInstance.Id+++ on the left-sided navigation pane.
 
-![](./media/image62.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image62.png)
 
-2.  In the **Fabric** home page, select **+New item.** In the Filter by
-    item type search box, enter +++**data agent**+++ and select the Data
-    agent
+1. In the **Fabric** home page, select **+New item.** In the Filter by item type search box, enter **+++data agent+++** and select the Data agent
 
-![](./media/image63.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image63.png)
 
-3.  Enter **+++Rayfin_agent+++** as the Data agent name and
-    select **Create**.
+1. Enter **+++Rayfin_agent+++** as the Data agent name and select **Create**.
 
-![](./media/image64.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image64.png)
 
-4.  In **Rayfin_agent** page, select **Add a data source**
+1. In **Rayfin_agent** page, select **Add a data source**
 
-![](./media/image65.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image65.png)
 
-5.  In the OneLake catalog tab, select the **contoso-chef** SQL database
-    and select **Add.**
+1. In the OneLake catalog tab, select the **contoso-chef** SQL database and select **Add.**
 
-![](./media/image66.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image66.png)
 
-![](./media/image67.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image67.png)
 
-6.  Select all tables
+1. Select all tables
 
-![](./media/image68.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image68.png)
 
-7.  Enter the following text and click on the **Submit icon** as shown
-    in the below image.
+1. Enter the following text and click on the **Submit icon** as shown in the below image.
 
-> +++How many recipes are available in the Contoso Chef application?+++
+    +++How many recipes are available in the Contoso Chef application?+++
 
-![](./media/image69.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image69.png)
 
-![](./media/image70.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image70.png)
 
-8.  Enter the following text and click on the **Submit** icon as shown
-    in the below image.
+1. Enter the following text and click on the **Submit** icon as shown in the below image.
 
-+++What are the newest recipes added to the platform?+++
+    +++What are the newest recipes added to the platform?+++
 
-![](./media/image71.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image71.png)
 
-![](./media/image72.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image72.png)
 
-> +++Which cuisine is most popular among users?+++
+    +++Which cuisine is most popular among users?+++
 
-![](./media/image73.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image73.png)
 
-![](./media/image74.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image74.png)
 
-9.  Select **Publish**.
+1. Select **Publish**.
 
-![](./media/image75.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image75.png)
 
-![](./media/image76.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image76.png)
 
-10. After publishing, verify the success message and select **View
-    publishing details** to review the agent deployment.
+1. After publishing, verify the success message and select **View publishing details** to review the agent deployment.
 
-![](./media/image77.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image77.png)
+
 
 # Task 12: Clean up resources
 
-1.  Select your workspace, the **Rayfin_FabricXXXX** from the left-hand
-    navigation menu. It opens the workspace item view.
+1. Select your workspace, the +++Rayfin_Fabric@lab.LabInstance.Id+++ from the left-hand navigation menu. It opens the workspace item view.
 
-> ![](./media/image78.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image78.png)
 
-2.  Select the ... option under the workspace name and
-    select **Workspace settings**.
+1. Select the ... option under the workspace name and select **Workspace settings**.
 
-![](./media/image79.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image79.png)
 
-3.  Navigate to the bottom of the General tab and select **Remove this
-    workspace**.
+1. Navigate to the bottom of the General tab and select **Remove this workspace**.
 
-![](./media/image80.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image80.png)
 
-![](./media/image81.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image81.png)
 
-![](./media/image82.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image82.png)
