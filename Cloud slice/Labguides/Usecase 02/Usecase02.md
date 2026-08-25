@@ -166,7 +166,7 @@ In this task, you create a Fabric workspace. The workspace contains all the item
 
 1. In your terminal, from your working folder (e.g. C:\Labfiles), clone the lab repository:
 
-    `git clone https://github.com/<your repo name>/ship-ai-apps-fast-with-a-managed-backend-in-microsoft-fabric.git`
+    +++git clone https://github.com/<your repo name>/ship-ai-apps-fast-with-a-managed-backend-in-microsoft-fabric.git+++
 
     ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2002/media/image21.png)
 
