@@ -234,7 +234,7 @@ In this task, you create a Fabric workspace. The workspace contains all the item
 
 1. In the integrated terminal, run the following command, replacing ***{workspace-id}*** with the **Microsoft Fabric workspace ID** that you saved in Task 1
 
-    `npx rayfin up --workspace-id <workspace-id>`
+    +++npx rayfin up --workspace-id <workspace-id>+++
 
     ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image28.png)
 
