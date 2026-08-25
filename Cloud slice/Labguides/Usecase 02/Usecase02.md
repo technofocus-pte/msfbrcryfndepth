@@ -250,6 +250,8 @@ In this task, you will inspect the generated project, initialize a Git repositor
 
     ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2002/media/image33.png)
 
+   +++git config --global user.email "your-email@example.com"+++
+
     ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2002/media/image34.png)
 
 1. Finally, make your first commit with this command:
@@ -669,7 +671,7 @@ Start GitHub Copilot CLI from the app project folder so it can read the project 
 
 1. Launch GitHub Copilot CLI:
 
-    `copilot –yolo`
+    +++copilot --yolo+++
 
     ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2002/media/image76.png)
 
