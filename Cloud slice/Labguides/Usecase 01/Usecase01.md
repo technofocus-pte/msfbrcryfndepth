@@ -188,7 +188,7 @@ In this task, you create a Fabric workspace. The workspace contains all the item
 
 1. Clone the repository and move into the app's source folder:
 
-    `git clone https://github.com/<youraccount>/rayfin-on-microsoft-fabric.git`
+    +++git clone https://github.com/<youraccount>/rayfin-on-microsoft-fabric.git+++
 
     ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%2001/media/image22.png)
 
