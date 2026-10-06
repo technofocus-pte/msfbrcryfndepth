@@ -80,8 +80,6 @@ After completing this lab, you will be able to:
 
 2.  In the Windows search box, type +++Visual Studio Code+++, and then select **Visual Studio Code**.
 
-![](./media/image1.png)
-
 3.  In Visual Studio Code, select the **More Actions (...)** menu, select **Terminal**, and then select **New Terminal**.
 
 ![](./media/image2.png)
