@@ -1,18 +1,10 @@
-## Usecase 01-Develop a CRUD-enabled Todo application with Rayfin in Fabric Apps
+# Usecase 01 - Develop a CRUD-enabled Todo application with Rayfin in Fabric Apps
 
-**Introduction**
+## Introduction
 
-This use case demonstrates how to develop and deploy a CRUD (Create,
-Read, Update, Delete) enabled To-Do application using **Rayfin** within
-**Microsoft Fabric Apps**. The exercise provides hands-on experience in
-creating a Microsoft Fabric workspace, deploying a prebuilt To-Do App
-template, configuring the development environment, running the
-application locally, and publishing it to Fabric. Participants learn how
-Fabric Apps simplifies full-stack application development by providing
-integrated backend services, authentication, data storage, and
-deployment capabilities.
+This use case demonstrates how to develop and deploy a CRUD (Create, Read, Update, Delete) enabled To-Do application using **Rayfin** within **Microsoft Fabric Apps**. The exercise provides hands-on experience in creating a Microsoft Fabric workspace, deploying a prebuilt To-Do App template, configuring the development environment, running the application locally, and publishing it to Fabric. Participants learn how Fabric Apps simplifies full-stack application development by providing integrated backend services, authentication, data storage, and deployment capabilities.
 
-**Objective**
+### Objective
 
 - Create and configure a Microsoft Fabric workspace for application
   development.
@@ -27,7 +19,6 @@ deployment capabilities.
   interface.
 
 - Test the application locally and validate functionality.
-
 - Publish the application to Microsoft Fabric using Rayfin deployment
   commands.
 
@@ -37,264 +28,217 @@ deployment capabilities.
 - Understand the end-to-end application lifecycle within the Microsoft
   Fabric ecosystem.
 
-**Prerequisites**
+
+### Prerequisites
 
 Before starting, make sure you have:
 
-1.  Node.js 20 or later installed. Check with "node -v" in a terminal.
-    If it's missing or older, install it from nodejs.org.
+1. Node.js 20 or later installed. Check with "node -v" in a terminal. If it's missing or older, install it from nodejs.org.
 
-2.  Git installed, to clone the sample repository.
+1. Git installed, to clone the sample repository.
 
-3.  Access to a Microsoft Fabric workspace where you have permission to
-    create an app (ask your Fabric admin if unsure).
+1. Access to a Microsoft Fabric workspace where you have permission to create an app (ask your Fabric admin if unsure).
 
-4.  A terminal / command-line application (PowerShell, Terminal, etc.).
+1. A terminal / command-line application (PowerShell, Terminal, etc.).
 
-# Task 1: Create a Fabric workspace
 
-In this task, you create a Fabric workspace. The workspace contains all
-the items needed for this lakehouse tutorial, which includes lakehouse,
-dataflows, Data Factory pipelines, the notebooks, Power BI datasets, and
-reports.
+### Task 1: Create a Fabric workspace
 
-1.  Open your browser, navigate to the address bar, and type or paste
-    the following URL:
-    +++<https://app.fabric.microsoft.com/+++> then press
-    the **Enter** button and sign in with your credentials
+In this task, you create a Fabric workspace. The workspace contains all the items needed for this lakehouse tutorial, which includes lakehouse, dataflows, Data Factory pipelines, the notebooks, Power BI datasets, and reports.
 
-| Credential | Value |
-|---|---|
-| Username | `[+++@lab.CloudPortalCredential](mailto:+++@lab.CloudPortalCredential)(User1).Username+++` |
-| Password | `[+++@lab.CloudPortalCredential](mailto:+++@lab.CloudPortalCredential)(User1).Password+++` |
+1. Open your browser, navigate to the address bar, and type or paste the following URL: +++https://app.fabric.microsoft.com/+++ then press the **Enter** button and sign in with your credentials
 
-![](./media/image1.png)
+    | Credential | Value |
+    |---|---|
+    | Username | +++@lab.CloudPortalCredential(User1).Username+++ |
+    | Password | +++@lab.CloudPortalCredential(User1).Password+++ |
 
-> ![](./media/image2.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image1.png)
 
-2.  In the portal, switch to **Fabric** Mode before proceeding to create
-    workspace.
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image2.png)
 
-![A screenshot of a computer AI-generated content may be
-incorrect.](./media/image3.png)
+1. In the portal, switch to **Fabric** Mode before proceeding to create workspace.
 
-3.  In the Workspaces pane, click on **+New workspace** tile
+    ![A screenshot of a computer AI-generated content may be incorrect.](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image3.png)
 
-![](./media/image4.png)
+1. In the Workspaces pane, click on **+New workspace** tile
 
-4.  In the **Create a workspace** pane that appears on the right side,
-    enter the following details, and click on the **Apply** button.
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image4.png)
 
-| Setting | Value |
-|---|---|
-| Name | `Rayfin-Fabric-TodoappXXXX` (**XXXX can be a unique number**) |
-| Advanced | Under **License mode**, select **Fabric** |
-| Default storage format | **Small dataset storage format** |
+1. In the **Create a workspace** pane that appears on the right side, enter the following details, and click on the **Apply** button.
 
-![](./media/image5.png)
+    | Setting | Value |
+    |---|---|
+    | Name | +++Rayfin-Fabric-Todoapp@lab.LabInstance.Id+++ |
+    | Advanced | Under **License mode**, select **Fabric** |
+    | Default storage format | **Small dataset storage format** |
 
-![](./media/image6.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image5.png)
 
-![](./media/image7.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image6.png)
 
-5.  Once the workspace loads, copy the URL from the browser address bar.
-    Remove anything after the workspace ID. The URL should look
-    like https://app.fabric.microsoft.com/groups/\<workspace-id\>.
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image7.png)
 
-> ![](./media/image8.png)
+1. Once the workspace loads, copy the URL from the browser address bar. Remove anything after the workspace ID. The URL should look like: https://app.fabric.microsoft.com/groups/*{workspace-id}*.
 
-# Task 2: Create a Fabric App
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image8.png)
 
-1.  Create a new lakehouse by clicking on the **+New item** button in
-    the navigation bar.
 
-![](./media/image9.png)
+### Task 2: Create a Fabric App
 
-2.  In the New item dialog, enter +++**app+++** in the search box, and
-    then select **App (preview)** from the search results
+1. Create a new lakehouse by clicking on the **+New item** button in the navigation bar.
 
-![](./media/image10.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image9.png)
 
-3.  On the Pick a template to get started page, select the **To-Do App**
-    template.
+1. In the New item dialog, enter +++app+++ in the search box, and then select **App (preview)** from the search results. Enter +++To do_app+++ for the app name.
 
-![](./media/image11.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image10.png)
 
-4.  After you select the *To-Do App* template, the app deployment starts
-    automatically. Wait approximately 2 to 3 minutes for the deployment
-    to complete
+1. On the Pick a template to get started page, select the **To-Do App** template.
 
-![](./media/image12.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image11.png)
 
-![](./media/image13.png)
+1. After you select the *To-Do App* template, the app deployment starts automatically. Wait approximately 2 to 3 minutes for the deployment to complete
 
-![](./media/image14.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image12.png)
 
-5.  In the Getting started section, under Set up your project, select
-    the **copy icon** to copy the scaffold command to your clipboard.
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image13.png)
 
-![](./media/image15.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image14.png)
 
-# Task 3: Deploy the backend and the app
+1. In the Getting started section, under Set up your project, select the **copy icon** to copy the scaffold command to your clipboard.
 
-1.  In File Explorer, navigate to **C:\LabFiles**, create a new folder
-    named **Todo-app.**
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image15.png)
 
-![](./media/image16.png)
 
-2.  In your Windows search box, type Visual Studio, then click
-    on **Visual Studio Code**.
+### Task 3: Deploy the backend and the app
 
-> ![A screenshot of a computer Description automatically
-> generated](./media/image17.png)
+1. In File Explorer, navigate to **C:\LabFiles**, create a new folder named +++Todo-app+++
 
-3.  In Visual Studio Code, select **File \> Open Folder**, and then
-    browse to and open the **C:\LabFiles\Todo-app** folder.
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image16.png)
 
-> ![](./media/image18.png)
->
-> ![](./media/image19.png)
+1. In your Windows search box, type Visual Studio, then click on **Visual Studio Code**.
 
-4.  When the Workspace Trust dialog appears, select **Yes, I trust the
-    authors** to open the folder and enable all features in Visual
-    Studio Code.
+    ![A screenshot of a computer Description automatically generated](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image17.png)
 
-> ![](./media/image20.png)
+1. In Visual Studio Code, select **File \> Open Folder**, and then browse to and open the **C:\LabFiles\Todo-app** folder.
 
-5.  In Visual Studio Code, click the **More Actions (⋯)** menu, select
-    **Terminal**, and then choose **New Terminal** to open a new
-    integrated terminal window
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image18.png)
 
-> ![](./media/image21.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image19.png)
 
-6.  In the Visual Studio Code terminal, paste the copied scaffold
-    command, and then press enter to create the To-Do app project in the
-    Todo-app folder.
+1. When the Workspace Trust dialog appears, select **Yes, I trust the authors** to open the folder and enable all features in Visual Studio Code.
 
-> ![](./media/image22.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image20.png)
 
-7.  Enter Y
+1. In Visual Studio Code, click the **More Actions (⋯)** menu, select **Terminal**, and then choose **New Terminal** to open a new integrated terminal window
 
-> ![](./media/image23.png)
->
-> ![](./media/image24.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image21.png)
 
-8.  Wait for the project scaffolding process to complete. When the
-    Project created successfully! message appears in the terminal, the
-    To-Do app project is ready for development.
+1. In the Visual Studio Code terminal, paste the copied scaffold command, and then press enter to create the To-Do app project in the Todo-app folder.
 
-> ![](./media/image25.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image22.png)
 
-9.  In the Visual Studio Code terminal, type +++**cd to-do-app**+++ and
-    press Enter to navigate to the newly created project directory.
+1. Enter +++Y+++
 
-> ![](./media/image26.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image23.png)
 
-10. Edit your app code directly. Run it locally against your Fabric
-    backend.
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image24.png)
 
-> **+++npm run dev+++**
->
-> ![](./media/image27.png)
+1. Wait for the project scaffolding process to complete. When the Project created successfully! message appears in the terminal, the To-Do app project is ready for development.
 
-11. Copy the local frontend URL shown in the terminal, which should be
-    similar to +++http://localhost:5173+++, and open it in a new browser
-    tab.
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image25.png)
 
-> ![](./media/image28.png)
+1. In the Visual Studio Code terminal, type `cd to-do-app` and press Enter to navigate to the newly created project directory.
 
-12. Select the **Sign in with Microsoft** button, sign in with the same
-    Microsoft account you used for Fabric:
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image26.png)
 
-    - **Email**: @lab.CloudPortalCredential(User1).Username
+1. Edit your app code directly. Run it locally against your Fabric backend.
 
-    - **TAP**: @lab.CloudPortalCredential(User1).AccessToken
+    `npm run dev`
 
-> ![](./media/image29.png)
->
-> ![](./media/image30.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image27.png)
 
-13. In the Todo App, enter +++**Create Fabric Workspace**+++ in the
-    input box, and then select **Add** to create a new to-do item.
+1. Copy the local frontend URL shown in the terminal, which should be similar to http://localhost:5173, and open it in a new browser tab.
 
-> ![](./media/image31.png)
->
-> **+++Create Fabric App+++**
->
-> ![](./media/image32.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image28.png)
 
-14. In the To-Do list, select the circle next to Create Fabric Workspace
-    to mark the task as completed.
+1. Select the **Sign in with Microsoft** button, sign in with the same Microsoft account you used for Fabric:
 
-> ![](./media/image33.png)
->
-> ![](./media/image34.png)
->
-> ![](./media/image35.png)
+    - **Username**: +++@lab.CloudPortalCredential(User1).Username+++
+    - **TAP**: +++@lab.CloudPortalCredential(User1).AccessToken+++
 
-15. Back in the Visual Studio Code terminal, stop the Vite dev server by
-    pressing **Ctrl+C**.
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image29.png)
 
-16. When you're ready, deploy your updates to Fabric.
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image30.png)
 
-**+++npx rayfin up+++**
 
-> ![](./media/image36.png)
+1. In the Todo App, enter `Create Fabric Workspace` in the input box, and then select **Add** to create a new to-do item.
 
-17. In the Visual Studio Code terminal output, locate the published
-    application URL, press Ctrl and select the URL
-    (https://happy-pearl-cd18684b37-westus2.webapp.fabricapps.net) to
-    open the deployed application in your default web browser.
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image31.png)
 
-> ![](./media/image37.png)
->
-> ![](./media/image38.png)
+    `Create Fabric App`
 
-18. Select the **Sign in with Microsoft** button, sign in with the same
-    Microsoft account you used for Fabric:
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image32.png)
 
-    - **Email**: @lab.CloudPortalCredential(User1).Username
+1. In the To-Do list, select the circle next to Create Fabric Workspace to mark the task as completed.
 
-    - **TAP**: @lab.CloudPortalCredential(User1).AccessToken
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image33.png)
 
-> ![](./media/image39.png)
->
-> ![](./media/image40.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image34.png)
 
-19. Open the Microsoft Fabric portal
-    at +++https://app.fabric.microsoft.com+++.
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image35.png)
 
-Open the **Rayfin\_<Fabric@lab.LabInstance.Id>** workspace you created
-in Task 1
+1. Back in the Visual Studio Code terminal, stop the Vite dev server by pressing **Ctrl+C**.
 
-20. Select **To do_app**
+1. When you're ready, deploy your updates to Fabric.
 
-> ![](./media/image41.png)
->
-> ![](./media/image42.png)
+    `npx rayfin up`
 
-21. In the SQL database explorer, expand **To do app \> dbo \> Tables**,
-    and then select the Todos table to verify that the to-do items are
-    stored successfully and that the Create Fabric Workspace task is
-    marked as completed.
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image36.png)
 
-> ![](./media/image43.png)
+1. In the Visual Studio Code terminal output, locate the published application URL, press Ctrl and select the URL (https://happy-pearl-cd18684b37-westus2.webapp.fabricapps.net) to open the deployed application in your default web browser.
 
-22. In the Fabric portal, select the *Rayfin-Fabric-TodoappXXXXX*
-    workspace from the navigation pane.
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image37.png)
 
-> ![](./media/image44.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image38.png)
 
-23. Select the ... option under the workspace name and
-    select **Workspace settings**.
+1. Select the **Sign in with Microsoft** button, sign in with the same Microsoft account you used for Fabric:
 
-> ![](./media/image45.png)
+    - **Username**: +++@lab.CloudPortalCredential(User1).Username+++
+    - **TAP**: +++@lab.CloudPortalCredential(User1).AccessToken+++
 
-24. Navigate to the bottom of the General tab and select **Remove this
-    workspace**.
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image39.png)
 
-![](./media/image46.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image40.png)
 
-![](./media/image47.png)
 
-![](./media/image48.png)
+1. Open the Microsoft Fabric portal at +++https://app.fabric.microsoft.com+++.
+
+    Open the **Rayfin\_<Fabric@lab.LabInstance.Id>** workspace you created in Task 1
+
+1. Select **To do_app**
+
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image41.png)
+
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image42.png)
+
+1. In the SQL database explorer, expand **To do app \> dbo \> Tables**, and then select the Todos table to verify that the to-do items are stored successfully and that the Create Fabric Workspace task is marked as completed.
+
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image43.png)
+
+1. In the Fabric portal, select the *Rayfin-**Fabric-Todoapp@lab.LabInstance.Id*** workspace from the navigation pane.
+
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image44.png)
+
+1. Select the ... option under the workspace name and select **Workspace settings**.
+
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image45.png)
+
+1. Navigate to the bottom of the General tab and select **Remove this workspace**.
+
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image46.png)
+
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image47.png)
+
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%201/media/image48.png)

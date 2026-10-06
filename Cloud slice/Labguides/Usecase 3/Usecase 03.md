@@ -1,611 +1,477 @@
-# Usecase 03-Implement a Public Transportation Data Application with Rayfin in Fabric Apps​
+# Usecase 03-Implement a Public Transportation Data Application with Rayfin in Fabric Apps​
 
-**Introduction**
+## Introduction
 
-This usecase demonstrates how to build and deploy a real-time public
-transportation monitoring application by integrating **Microsoft
-Fabric**, **Rayfin**, **Eventstream**, **Eventhouse (KQL Database)**,
-**Semantic Models**, and **Fabric Apps**. The solution ingests live
-transportation data, processes and stores it in Microsoft Fabric,
-creates analytical models, and exposes the data through a modern web
-application. This hands-on implementation showcases how organizations
-can use Microsoft Fabric's end-to-end analytics capabilities to develop
-scalable, real-time operational dashboards and applications for public
-transportation systems.
+This usecase demonstrates how to build and deploy a real-time public transportation monitoring application by integrating **Microsoft Fabric**, **Rayfin**, **Eventstream**, **Eventhouse (KQL Database)**, **Semantic Models**, and **Fabric Apps**. The solution ingests live transportation data, processes and stores it in Microsoft Fabric, creates analytical models, and exposes the data through a modern web application. This hands-on implementation showcases how organizations can use Microsoft Fabric's end-to-end analytics capabilities to develop scalable, real-time operational dashboards and applications for public transportation systems.
 
-**Objective**
+### Objective
 
 - Set Up the Microsoft Fabric Environment
-
 - Prepare the Development Environment
-
 - Deploy the Real-Time Data Backend
-
 - Build the Analytical Data Model
-
 - Configure Security and Authentication
-
 - Deploy the Rayfin Application
-
 - Validate the End-to-End Solution
 
-**Prerequisites**
+
+### Prerequisites
 
 Before starting, make sure you have:
 
-1.  Node.js 20 or later installed. Check with "node -v" in a terminal.
-    If it's missing or older, install it from nodejs.org.
+1. Node.js 20 or later installed. Check with "node -v" in a terminal. If it's missing or older, install it from nodejs.org.
 
-2.  Git installed, to clone the sample repository.
+1. Git installed, to clone the sample repository.
 
-3.  Access to a Microsoft Fabric workspace where you have permission to
-    create an app (ask your Fabric admin if unsure).
+1. Access to a Microsoft Fabric workspace where you have permission to create an app (ask your Fabric admin if unsure).
 
-4.  A terminal / command-line application (PowerShell, Terminal, etc.).
+1. A terminal / command-line application (PowerShell, Terminal, etc.).
 
-5.  GitHub account -- You are expected to have your own GitHub login
-    credentials. If you do not have, please create one from here -
-    +++https://github.com/signup?user_email=&source=form-home-signup+++
+1. GitHub account -- You are expected to have your own GitHub login credentials. If you do not have, please create one from here - +++https://github.com/signup?user_email=&source=form-home-signup+++
 
-# Task 1: Create a Fabric workspace
 
-In this task, you create a Fabric workspace. The workspace contains all
-the items needed for this lakehouse tutorial, which includes lakehouse,
-dataflows, Data Factory pipelines, the notebooks, Power BI datasets, and
-reports.
+### Task 1: Create a Fabric workspace
 
-1.  Open your browser, navigate to the address bar, and type or paste
-    the following URL:
-    +++https://app.fabric.microsoft.com/+++ then press
-    the **Enter** button and sign in with your credentials
+In this task, you create a Fabric workspace. The workspace contains all the items needed for this lakehouse tutorial, which includes lakehouse, dataflows, Data Factory pipelines, the notebooks, Power BI datasets, and reports.
 
-| Credential | Value |
-|---|---|
-| Username | `[+++@lab.CloudPortalCredential](mailto:+++@lab.CloudPortalCredential)(User1).Username+++` |
-| Password | `[+++@lab.CloudPortalCredential](mailto:+++@lab.CloudPortalCredential)(User1).Password+++` |
+1. Open your browser, navigate to the address bar, and type or paste the following URL: +++https://app.fabric.microsoft.com/+++ then press the **Enter** button and sign in with your credentials
 
-![](./media/image1.png)
+    | Credential | Value |
+    |---|---|
+    | Username | +++@lab.CloudPortalCredential(User1).Username+++ |
+    | Password | +++@lab.CloudPortalCredential(User1).Password+++ |
 
-> ![](./media/image2.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image1.png)
 
-2.  In the portal, switch to **Fabric** Mode before proceeding to create
-    workspace.
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image2.png)
 
-![A screenshot of a computer AI-generated content may be
-incorrect.](./media/image3.png)
+1. In the portal, switch to **Fabric** Mode before proceeding to create workspace.
 
-![](./media/image4.png)
+    ![A screenshot of a computer AI-generated content may be incorrect.](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image3.png)
 
-3.  In the Workspaces pane, click on **+New workspace** tile
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image4.png)
 
-![](./media/image5.png)
+1. In the Workspaces pane, click on **+New workspace** tile
 
-4.  In the **Create a workspace** pane that appears on the right side,
-    enter the following details, and click on the **Apply** button.
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image5.png)
 
-| Setting | Value |
-|---|---|
-| Name | `Rayfin-Fabric-TodoappXXXX` (**XXXX can be a unique number**) |
-| Advanced | Under **License mode**, select **Fabric** |
-| Default storage format | **Small dataset storage format** |
+1. In the **Create a workspace** pane that appears on the right side, enter the following details, and click on the **Apply** button.
 
-![](./media/image6.png)
+    | Setting | Value |
+    |---|---|
+    | Name | +++Rayfin-Fabric-Todoapp@lab.LabInstance.Id+++ |
+    | Advanced | Under **License mode**, select **Fabric** |
+    | Default storage format | **Small dataset storage format** |
 
-![](./media/image7.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image6.png)
 
-5.  Once the workspace loads, copy the URL from the browser address bar.
-    Remove anything after the workspace ID. The URL should look
-    like https://app.fabric.microsoft.com/groups/\<workspace-id\>.
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image7.png)
 
-![](./media/image8.png)
+1. Once the workspace loads, copy the URL from the browser address bar. Remove anything after the workspace ID. The URL should look like https://app.fabric.microsoft.com/groups/*{workspace-id}*.
 
-# Task 2: Clone the lab repository
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image8.png)
 
-1.  Open your browser, navigate to the address bar, type or paste the
-    following URL:
 
-+++https://github.com/technofocus-pte/TF-Rayfin+++
+### Task 2: Clone the lab repository
 
-2.  Click on **fork** to fork the repo. Give unique name to the repo and
-    click on **Create repo** button.
+1. Open your browser, navigate to the address bar, type or paste the following URL:
 
-![](./media/image9.png)
+    +++https://github.com/technofocus-pte/TF-Rayfin+++
 
-3.  In your GitHub repository, click **Code** and then select the
-    **Copy** icon next to the repository URL to copy the clone link for
-    use in the upcoming steps.
+1. Click on **fork** to fork the repo. Give unique name to the repo and click on **Create repo** button.
 
-![](./media/image10.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image9.png)
 
-# Task 3: Validate Required Software Setup
+1. In your GitHub repository, click **Code** and then select the **Copy** icon next to the repository URL to copy the clone link for use in the upcoming steps.
 
-1.  In your Windows search box, type Visual Studio, then click
-    on **Visual Studio Code**.
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image10.png)
 
-> ![A screenshot of a computer Description automatically
-> generated](./media/image11.png)
 
-2.  In Visual Studio Code, click the **More Actions (⋯)** menu, select
-    **Terminal**, and then choose **New Terminal** to open a new
-    integrated terminal window
+### Task 3: Validate Required Software Setup
 
-![](./media/image12.png)
+1. In your Windows search box, type Visual Studio, then click on **Visual Studio Code**.
 
-3.  In the terminal, navigate to the **Labfiles** directory
+    ![A screenshot of a computer Description automatically generated](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image11.png)
 
-![](./media/image13.png)
+1. In Visual Studio Code, click the **More Actions (⋯)** menu, select **Terminal**, and then choose **New Terminal** to open a new integrated terminal window
 
-4.  Run the following commands in your terminal and confirm each returns
-    a version number:
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image12.png)
 
-> **+++node –version+++**
->
-> **+++npm –version+++**
->
-> **+++git –version+++**
->
-> **+++copilot –version+++**
+1. In the terminal, navigate to the **Labfiles** directory
 
-![](./media/image14.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image13.png)
 
-# Task 4: Get the source code
+1. Run the following commands in your terminal and confirm each returns a version number:
 
-1.  Clone the repository and move into the app's source folder:
+    - `node –version`
+    - `npm –version`
+    - `git –version`
+    - `copilot –version`
 
-     +++git clone https://github.com/<youraccount>/ TF-Rayfin.git+++ 
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image14.png)
 
-![](./media/image15.png)
 
-2.  Change the directory
+### Task 4: Get the source code
 
-> **+++cd TF-Rayfin/templates/helsinki-public-transport+++**
+1. Clone the repository and move into the app's source folder:
 
-![](./media/image16.png)
+    `git clone https://github.com/<youraccount>/ TF-Rayfin.git`
 
-3.  In the Visual Studio Code terminal, run the az login command and
-    complete the sign-in process using your Azure account credentials.
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image15.png)
 
-> **+++az login+++**
+1. Navigate to the project root directory, run the npm install command to install all required project dependencies, and wait for the installation process to complete successfully.
 
-![](./media/image17.png)
+    `cd TF-Rayfin/templates/helsinki-public-transport`
 
-4.  In the Sign in window, select Work or school account, and then
-    select Continue to sign in with your organizational account.
+    `npm install`
 
-![](./media/image18.png)
+    >[!Note] If the **npm install** commands returns with an error or warning suggesting to use Rayfin CLI version greater than **1.35.0-alpha.1413**, run the below command to install the appropriate version on Rayfin CLI to progress further,
 
-![](./media/image19.png)
+    `npm install -D @microsoft/rayfin-cli@1.35.1`
 
-![](./media/image20.png)
+    `npm install @microsoft/rayfin-auth-provider-fabric@1.35.1 @microsoft/rayfin-client@1.35.1 @microsoft/rayfin-connector-fabric-semanticmodel@1.35.1 @microsoft/rayfin-core@1.35.1`
 
-![](./media/image21.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image16.png)
 
-4.  Select your subscription
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image51.png)
 
-![](./media/image22.png)
+1. In the Visual Studio Code terminal, run the az login command and complete the sign-in process using your Azure account credentials.
 
-5.  In the Visual Studio Code terminal, run the az account show --query
-    tenantId -o tsv command, and then note the displayed tenant ID for
-    later use in the configuration steps.
+    `az login`
 
-> **+++az account show --query tenantId -o tsv+++**
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image17.png)
 
-![](./media/image23.png)
+1. In the Sign in window, select Work or school account, and then select Continue to sign in with your organizational account.
 
-+++az login --tenant \<tenant-id\>+++
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image18.png)
 
-![](./media/image24.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image19.png)
 
-6.  Select your subscription
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image20.png)
 
-![](./media/image25.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image21.png)
 
-+++$env:FABRIC_TENANT_ID = "\<tenant-id\>"+++
+1. Select your subscription
 
-+++$env:FABRIC_WORKSPACE_ID = "\<workspace-id\>"+++
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image22.png)
 
-![](./media/image26.png)
+1. In the Visual Studio Code terminal, run the az account show --query tenantId -o tsv command, and then store deployment values in variables.
 
-# Task 5: Deploy the Fabric Back End
+    `$TenantId = az account show --query tenantId -o tsv`
 
-1.  Creates the Eventhouse (which implicitly creates a KQL database of
-    the same name), then reads back its query URI and database id for
-    later steps.
+    `$WorkspaceId = "<YOUR-FABRIC-WORKSPACE-ID>"`
 
-+++cd fabric/deploy+++
+    `$env:FABRIC_TENANT_ID = $TenantId`
 
-+++python 01_eventhouse.py+++
+    `$env:FABRIC_WORKSPACE_ID = $WorkspaceId`
 
-> ![](./media/image27.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image23.png)
 
-2.  Sends every command in fabric/eventhouse/DatabaseSchema.kql to the
-    Kusto management endpoint, one at a time: creates raw_events,
-    vehicle_positions, trip_updates and alerts, the three parse
-    functions, the last_vehicle_position materialized view, and the
-    update policies that wire raw_events to the typed tables. All
-    commands are idempotent.
 
-3.  In the Visual Studio Code terminal, navigate to the fabric\deploy
-    folder, run the python 02_kql_schema.py command, and then verify
-    that the *schema applied* message appears, indicating that the KQL
-    schema has been successfully created.
+### Task 5: Deploy the Fabric Back End
 
-**+++python 02_kql_schema.py+++**
+1. Creates the Eventhouse (which implicitly creates a KQL database of the same name), then reads back its query URI and database id for later steps.
 
-![](./media/image28.png)
+    `cd fabric/deploy`
 
-4.  Instantiates fabric/eventstream/eventstream.json with fresh node
-    GUIDs for the source, stream and destination nodes, and points the
-    destination at the Eventhouse from step 1. The source id is recorded
-    — the producer notebook needs it to resolve its connection string at
-    run time.
+    `python 01_eventhouse.py`
 
-5.  In the Visual Studio Code terminal, run the python 03_eventstream.py
-    command, and then verify that the event stream is created
-    successfully by reviewing the displayed Eventstream ID and source ID
-    details.
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image27.png)
 
-**+++python 03_eventstream.py+++**
+1. Sends every command in fabric/eventhouse/DatabaseSchema.kql to the Kusto management endpoint, one at a time: creates raw_events, vehicle_positions, trip_updates and alerts, the three parse functions, the last_vehicle_position materialized view, and the update policies that wire raw_events to the typed tables. All commands are idempotent.
 
-![](./media/image29.png)
+1. In the Visual Studio Code terminal, navigate to the fabric\deploy folder, run the python 02_kql_schema.py command, and then verify that the *schema applied* message appears, indicating that the KQL schema has been successfully created.
 
-6.  Publishes fabric/notebook/notebook-content.py as a Fabric notebook,
-    patching in the Eventstream item id and source id so the notebook
-    can resolve its own connection string via the Fabric REST API — it
-    never stores a secret.
+    `python 02_kql_schema.py`
 
-> **+++python 04_notebook.py+++**
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image28.png)
 
-![](./media/image30.png)
+1. Instantiates fabric/eventstream/eventstream.json with fresh node GUIDs for the source, stream and destination nodes, and points the destination at the Eventhouse from step 1. The source id is recorded — the producer notebook needs it to resolve its connection string at run time.
 
-7.  Publishes the TMDL definition under fabric/semantic-model/,
-    rewriting every AzureDataExplorer.Contents(...) partition expression
-    to point at this deployment's Kusto cluster URI and database. The
-    .platform metadata file is deliberately not uploaded, since Fabric
-    assigns that itself.
+1. In the Visual Studio Code terminal, run the python 03_eventstream.py command, and then verify that the event stream is created successfully by reviewing the displayed Eventstream ID and source ID details.
 
-8.  In the Visual Studio Code terminal, run the python 04_notebook.py
-    command, and then verify that the notebook is created successfully
-    by confirming that the notebook name and ID are displayed in the
-    terminal output.
+    `python 03_eventstream.py`
 
-**+++python 05_semantic_model.py+++**
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image29.png)
 
-![](./media/image31.png)
+1. Publishes fabric/notebook/notebook-content.py as a Fabric notebook, patching in the Eventstream item id and source id so the notebook can resolve its own connection string via the Fabric REST API — it never stores a secret.
 
-![](./media/image32.png)
+    `python 04_notebook.py`
 
-9.  Takes ownership of the semantic model's dataset, PATCHes its gateway
-    data source with a real Kusto access token, then switches the data
-    source to end-user OAuth2 credentials. Skipping this step is the
-    single most common cause of a broken lab: executeQueries returns
-    HTTP 400 DatasetExecuteQueriesError and the app shows zeros with no
-    further explanation.
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image30.png)
 
-10. In the Visual Studio Code terminal, run the python
-    06_bind_credentials.py command, and then verify that the process
-    completes successfully by confirming that the terminal displays
-    *final credentialType: OAuth2*.
+1. Publishes the TMDL definition under fabric/semantic-model/, rewriting every AzureDataExplorer.Contents(...) partition expression to point at this deployment's Kusto cluster URI and database. The .platform metadata file is deliberately not uploaded, since Fabric assigns that itself.
 
-> +++python 06_bind_credentials.py+++
+1. In the Visual Studio Code terminal, run the python 05_notebook.py command, and then verify that the notebook is created successfully by confirming that the notebook name and ID are displayed in the terminal output.
 
-![](./media/image33.png)
+    `python 05_semantic_model.py`
 
-11. Creates an hourly Cron trigger for the notebook. The notebook itself
-    runs on a 58-minute budget so successive runs hand over without
-    overlapping, and stands down on its own if an older run is still
-    active.
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image31.png)
 
-> +++python 07_schedule.py+++
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image32.png)
 
-![](./media/image34.png)
+1. Takes ownership of the semantic model's dataset, PATCHes its gateway data source with a real Kusto access token, then switches the data source to end-user OAuth2 credentials. Skipping this step is the single most common cause of a broken lab: executeQueries returns HTTP 400 DatasetExecuteQueriesError and the app shows zeros with no further explanation. Run the below commands to capture the Semantic Model ID.
 
-12. In the Visual Studio Code terminal, run the az ad app create
-    --display-name "helsinki-public-transport-spa" --sign-in-audience
-    AzureADMyOrg command to create a Microsoft Entra application, and
-    then note the generated appId from the command output for use in
-    later configuration steps.
+    `$state = Get-Content .\.state.json -Raw | ConvertFrom-Json`
 
-      +++az ad app create --display-name "helsinki-public-transport-spa" --sign-in-audience AzureADMyOrg+++
+    `$SemanticModelId = $state.semantic_model_id`
 
+    `Write-Host "Semantic Model ID: $SemanticModelId"`
 
-![](./media/image35.png)
+1. In the Visual Studio Code terminal, run the python 06_bind_credentials.py command, and then verify that the process completes successfully by confirming that the terminal displays *final credentialType: OAuth2*.
 
-13. From the command output, copy the value of the **appId** property
-    and save it for use in subsequent deployment and configuration
-    steps.
+    `python 06_bind_credentials.py`
 
-![](./media/image36.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image33.png)
 
-![](./media/image37.png)
+1. Creates an hourly Cron trigger for the notebook. The notebook itself runs on a 58-minute budget so successive runs hand over without overlapping, and stands down on its own if an older run is still active.
 
-14. In the Visual Studio Code terminal, run the command to retrieve the
-    application ID, store it in the appId variable, and then run echo
-    $appId to display and verify the application ID value.
+    `python 07_schedule.py`
 
-+++$appId = az ad app list --display-name "helsinki-public-transport-spa" --query "[0].appId" -o tsv+++
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image34.png)
 
-+++ echo $appId+++
+1. In the Visual Studio Code terminal, run the **az ad app create --display-name "helsinki-public-transport-spa" --sign-in-audience AzureADMyOrg** command to create a Microsoft Entra application, and then note the generated appId from the command output for use in later configuration steps.
 
-![](./media/image38.png)
+    `az ad app create --display-name "helsinki-public-transport-spa" --sign-in-audience AzureADMyOrg`
 
-15. Open the Azure portal at +++https://portal.azure.com+++, enter
-    +++Microsoft Entra ID+++ in the search box, and then select
-    Microsoft Entra ID from the search results to open the Microsoft
-    Entra administration center.
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image35.png)
 
-![](./media/image39.png)
+1. From the command output, copy the value of the **appId** property and save it for use in subsequent deployment and configuration steps.
 
-16. In the Microsoft Entra administration center, select **App
-    registrations** under **Manage**, and then select the
-    **helsinki-public-transport-spa** application to open its
-    registration details.
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image36.png)
 
-![](./media/image40.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image37.png)
 
-17. In the **helsinki-public-transport-spa** application registration,
-    under **Manage**, select **API permissions** to view and configure
-    the permissions required by the application.
+1. In the Visual Studio Code terminal, run the command to retrieve the application ID, store it in the appId variable, and then run echo $appId to display and verify the application ID value.
 
-![](./media/image41.png)
+    `$appId = az ad app list --display-name "helsinki-public-transport-spa" --query "[0].appId" -o tsv`
 
-18. On the API permissions page, select **Add a permission** to add the
-    API permissions required by the helsinki-public-transport-spa
-    application.
+    `echo $appId`
 
-![](./media/image42.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image38.png)
 
-19. In the Request API permissions pane, select the **APIs my
-    organization** **uses** tab to browse and select APIs that are
-    available within your organization.
+1. Open the Azure portal at +++https://portal.azure.com+++, enter +++Microsoft Entra ID+++ in the search box, and then select Microsoft Entra ID from the search results to open the Microsoft Entra administration center.
 
-![](./media/image43.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image39.png)
 
-20. In the Request API permissions pane, on the APIs my organization
-    uses tab, enter **Power BI Service** in the search box, and then
-    select **Power BI Service** from the search results.
+1. In the Microsoft Entra administration center, select **App registrations** under **Manage**, and then select the **helsinki-public-transport-spa** application to open its registration details.
 
-![](./media/image44.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image40.png)
 
-21. In the Request API permissions pane for Power BI Service, select
-    **Delegated permissions** to grant the application access to Power
-    BI APIs on behalf of the signed-in user.
+1. In the **helsinki-public-transport-spa** application registration, under **Manage**, select **API permissions** to view and configure the permissions required by the application.
 
-![](./media/image45.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image41.png)
 
-22. In the Request API permissions pane, expand **Dataset,** select the
-    **Dataset.Read.All** permission, and then select Add permissions to
-    grant the application read access to all datasets available to the
-    signed-in user.
+1. On the API permissions page, select **Add a permission** to add the API permissions required by the helsinki-public-transport-spa application.
 
-> ![](./media/image46.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image42.png)
 
-![](./media/image47.png)
+1. In the Request API permissions pane, select the **APIs my organization** **uses** tab to browse and select APIs that are available within your organization.
 
-23. In the Visual Studio Code terminal, create the .env.production.local
-    file, add the required dataset ID, client ID, and tenant ID values,
-    and then save the file to configure the application for production
-    deployment.
-```
-@"
-VITE_PBI_DATASET_ID=
-VITE_PBI_CLIENT_ID=
-VITE_PBI_TENANT_ID=
-"@ | Set-Content -Path .env.production.local -Encoding utf8
-```
-![](./media/image48.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image43.png)
 
-24. Checks, in order: (1) Eventstream topology — every node Running; (2)
-    Kusto row counts and data freshness; (3) the exact DAX query the app
-    itself issues, via executeQueries.
+1. In the Request API permissions pane, on the APIs my organization uses tab, enter +++Power BI Service+++ in the search box, and then select **Power BI Service** from the search results.
 
-+++ python 09_verify.py+++
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image44.png)
 
-A useful diagnostic pattern from 09_verify.py: if the all-time position
-counter is large but the live vehicle table is empty, that means
-ingestion stopped more than roughly two hours ago — it is a
-pipeline/capacity issue, not an authentication issue.
+1. In the Request API permissions pane for Power BI Service, select **Delegated permissions** to grant the application access to Power BI APIs on behalf of the signed-in user.
 
-![](./media/image49.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image45.png)
 
-25. Open the Microsoft Fabric portal at
-    +++https://app.fabric.microsoft.com+++.
+1. In the Request API permissions pane, expand **Dataset,** select the **Dataset.Read.All** permission, and then select Add permissions to grant the application read access to all datasets available to the signed-in user.
 
-26. Verify that the required resources have been created successfully in
-    the Fabric workspace, including the **Eventstream, Eventhouse, KQL
-    database, semantic model, and notebook**.
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image46.png)
 
-![](./media/image50.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image47.png)
 
-# Task 6: Install dependencies and run locally
+1. In the Visual Studio Code terminal, create the .env.production.local file, add the required dataset ID, client ID, and tenant ID values, and then save the file to configure the application for production deployment.
 
-1.  In the Visual Studio Code terminal, navigate to the project root
-    directory, run the npm install command to install all required
-    project dependencies, and wait for the installation process to
-    complete successfully.
+    ```
+    @"
+    VITE_FABRIC_WORKSPACE_ID=$WorkspaceId
+    VITE_PBI_DATASET_ID=$SemanticModelId
+    VITE_PBI_CLIENT_ID=$AppId
+    VITE_PBI_TENANT_ID=$TenantId
+    "@ | Set-Content -Path .env.production.local -Encoding utf8
+    ```
 
-+++cd ..\\.+++
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image48.png)
 
-+++npm install+++
+1. Checks, in order: (1) Eventstream topology — every node Running; (2) Kusto row counts and data freshness; (3) the exact DAX query the app itself issues, via executeQueries.
 
-![](./media/image51.png)
+    `python 09_verify.py`
 
-2.  In the Visual Studio Code terminal, run the npm run dev command to
-    start the application in development mode.
+    A useful diagnostic pattern from 09_verify.py: if the all-time position counter is large but the live vehicle table is empty, that means ingestion stopped more than roughly two hours ago — it is a pipeline/capacity issue, not an authentication issue.
 
-+++npm run dev+++
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image49.png)
 
-3.  When prompted, enter the Fabric workspace name (Rayfin-FabricXXXXXX)
-    and press Enter to continue the deployment process.
+1. Open the Microsoft Fabric portal at +++https://app.fabric.microsoft.com+++.
 
-![](./media/image52.png)
+1. Verify that the required resources have been created successfully in the Fabric workspace, including the **Eventstream, Eventhouse, KQL database, semantic model, and notebook**.
 
-![](./media/image53.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image50.png)
 
-4.  Copy the local frontend URL shown in the terminal, which should be
-    similar to **http://localhost:5173**, and open it in a new browser
-    tab.
 
-![](./media/image54.png)
+### Task 6: Enable/Add connectors and run locally
 
-5.  Select the **Sign in with Microsoft** button, sign in with the same
-    Microsoft account you used for Fabric:
+1. Enable connectors in the current PowerShell session. Run the following commands from your root directory to set the **RAYFIN_FEATURE_FLAGS** variable and then to verify of it returns with the value as **connectors**.
 
-    - **Email**: @lab.CloudPortalCredential(User1).Username
+    `$env:RAYFIN_FEATURE_FLAGS = "connectors"`
 
-    - **TAP**: @lab.CloudPortalCredential(User1).AccessToken
+    `$env:RAYFIN_FEATURE_FLAGS`
 
-![](./media/image55.png)
+1. Add Rayfin connector for the **hslModel**
 
-![](./media/image56.png)
+    ```
+    npx rayfin connector add `
+    --type fabric-semanticmodel `
+    --workspace-id $WorkspaceId `
+    --item-id $SemanticModelId `
+    --name hslModel `
+    --operations executeQuery
+    ```
 
-6.  In the Visual Studio Code terminal, run the npx rayfin up
-    --workspace-id \<workspace-id\> --tenant \<tenant-id\> command to
-    deploy the application to your Fabric workspace, and then verify
-    that the deployment completes successfully.
+1. In the Visual Studio Code terminal, navigate to the project root directory, run the fabric build command before running the application.
 
-   +++**npx rayfin up --workspace-id <workspace-id> --tenant <tenant-id> -y**+++
+    `npm run build:fabric`
 
-![](./media/image57.png)
+1. In the Visual Studio Code terminal, run the npm run dev command to start the application in development mode.
 
-![](./media/image58.png)
+    `npm run dev`
 
-7.  Verify that the application deployment completed successfully, and
-    then copy the published application URL from the terminal output to
-    access the deployed application.
+1. When prompted, enter the Fabric workspace name +++Rayfin-Fabric-Todoapp@lab.LabInstance.Id+++ and press Enter to continue the deployment process.
 
-![](./media/image58.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image52.png)
 
-8.  Go to the **Azure portal**, navigate to **Microsoft Entra ID \> App
-    registrations**, select the **helsinki-public-transport-spa app**
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image53.png)
 
-9.  Then, under Manage, select **Authentication (Preview)**. On the
-    Authentication page, select **Add Redirect URI** to configure a
-    redirect URI for the application.
+1. Copy the local frontend URL shown in the terminal, which should be similar to **http://localhost:5173**, and open it in a new browser tab.
 
-![](./media/image59.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image54.png)
 
-10. In the Select a platform to add redirect URI pane, under Web
-    applications, select **Single-page application** to configure the
-    redirect URI for the browser-based application.
+1. Select the **Sign in with Microsoft** button, sign in with the same Microsoft account you used for Fabric:
 
-> ![](./media/image60.png)
+    - **Username**: +++@lab.CloudPortalCredential(User1).Username+++
+    - **TAP**: +++@lab.CloudPortalCredential(User1).AccessToken+++
 
-11. In the Add Redirect URI pane, enter the **published application
-    URL** in the Redirect URI field, and then select **Configure** to
-    save the redirect URI settings for the single-page application.
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image55.png)
 
-> ![](./media/image61.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image56.png)
 
-![](./media/image62.png)
 
-12. In the Visual Studio Code terminal, create the .env.production.local
-    file, add the required dataset ID, client ID, and tenant ID values,
-    and then save the file to configure the application for production
-    deployment.
+1. In the Visual Studio Code terminal, run the npx rayfin up --workspace-id *{workspace-id}* --tenant *{tenant-id}* command to deploy the application to your Fabric workspace, and then verify that the deployment completes successfully.
 
-```
-@"
-VITE_PBI_DATASET_ID=
-VITE_PBI_CLIENT_ID=
-VITE_PBI_TENANT_ID=
-"@ | Set-Content -Path .env.production.local -Encoding utf8
-```
+    `npx rayfin up --workspace-id $WorkspaceId --tenant $TenantId -y`
 
-![](./media/image63.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image57.png)
 
-13. Rebuild and redeploy
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image58.png)
 
-+++**npx rayfin up --workspace-id <workspace-id> --tenant <tenant-id> -y**+++
+1. Verify that the application deployment completed successfully, and then copy the published application URL from the terminal output to access the deployed application.
 
-![](./media/image64.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image58.png)
 
-14. In the Visual Studio Code terminal output, locate the published
-    application URL, press Ctrl and select the URL
-    (https://tiny-fawn-f224590f38-westus2.webapp.fabricapps.net) to open
-    the deployed application in your default web browser.
+1. Go to the **Azure portal**, navigate to **Microsoft Entra ID \> App registrations**, select the **helsinki-public-transport-spa app**
 
-![](./media/image65.png)
+1. Then, under Manage, select **Authentication (Preview)**. On the Authentication page, select **Add Redirect URI** to configure a redirect URI for the application.
 
-![](./media/image66.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image59.png)
 
-15. Select the **Sign in with Microsoft** button, sign in with the same
-    Microsoft account you used for Fabric:
+1. In the Select a platform to add redirect URI pane, under Web applications, select **Single-page application** to configure the redirect URI for the browser-based application.
 
-    - **Email**: @lab.CloudPortalCredential(User1).Username
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image60.png)
 
-    - **TAP**: @lab.CloudPortalCredential(User1).AccessToken
+1. In the Add Redirect URI pane, enter the **published application URL** in the Redirect URI field, and then select **Configure** to save the redirect URI settings for the single-page application.
 
-![](./media/image67.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image61.png)
 
-![](./media/image68.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image62.png)
 
-16. Click "**Connect live data"**
+1. In the Visual Studio Code terminal, create the .env.production.local file, add the required dataset ID, client ID, and tenant ID values, and then save the file to configure the application for production deployment.
 
-![](./media/image69.png)
+    ```
+    @"
+    VITE_FABRIC_WORKSPACE_ID=$WorkspaceId
+    VITE_PBI_DATASET_ID=$SemanticModelId
+    VITE_PBI_CLIENT_ID=$AppId
+    VITE_PBI_TENANT_ID=$TenantId
+    "@ | Set-Content -Path .env.production.local -Encoding utf8
+    ```
 
-17. On the Microsoft sign-in consent screen, review the requested
-    permissions for the helsinki-public-transport-spa application, and
-    then select Accept to grant the application access to the required
-    Power BI resources.
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image63.png)
 
-![](./media/image70.png)
+1. Rebuild and redeploy
 
-![](./media/image71.png)
+    `npx rayfin up --workspace-id $WorkspaceId --tenant $TenantId -y`
 
-![](./media/image72.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image64.png)
 
-18. Open the Microsoft Fabric portal
-    at +++https://app.fabric.microsoft.com+++.
+1. In the Visual Studio Code terminal output, locate the published application URL, press Ctrl and select the URL (https://tiny-fawn-f224590f38-westus2.webapp.fabricapps.net) to open the deployed application in your default web browser.
 
-Open the **Rayfin\_<Fabric@lab.LabInstance.Id>** workspace you created
-in Task 1
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image65.png)
 
-19. Select App
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image66.png)
 
-![](./media/image73.png)
+1. Select the **Sign in with Microsoft** button, sign in with the same Microsoft account you used for Fabric:
 
-20. Click "**Connect live data"**
+    - **Username**: +++@lab.CloudPortalCredential(User1).Username+++
+    - **TAP**: +++@lab.CloudPortalCredential(User1).AccessToken+++
 
-![](./media/image74.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image67.png)
 
-![](./media/image72.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image68.png)
 
-21. In the Fabric portal, expand the Rayfin-FabricXXXXX workspace, and
-    then select the helsinki-public-transport app from the workspace
-    navigation pane to open the deployed application and verify that it
-    loads successfully.
 
-![](./media/image75.png)
+1. Click "**Connect live data"**
 
-![](./media/image76.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image69.png)
 
-# Task 7: Clean up resources
+1. On the Microsoft sign-in consent screen, review the requested permissions for the helsinki-public-transport-spa application, and then select Accept to grant the application access to the required Power BI resources.
 
-1.  Select your workspace, the **Rayfin_FabricXXXX** from the left-hand
-    navigation menu. It opens the workspace item view.
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image70.png)
 
-&nbsp;
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image71.png)
 
-2.  Select the ... option under the workspace name and
-    select **Workspace settings**.
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image72.png)
 
-![](./media/image77.png)
+1. Open the Microsoft Fabric portal at +++https://app.fabric.microsoft.com+++.
 
-3.  Navigate to the bottom of the General tab and select **Remove this
-    workspace**.
+    Open the **Rayfin\_<Fabric@lab.LabInstance.Id>** workspace you created in Task 1
 
-![](./media/image78.png)
+1. Select App
 
-![](./media/image79.png)
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image73.png)
 
-![](./media/image80.png)
+1. Click **Connect live data**
 
-**Summary**
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image74.png)
 
-This usecase guides users through creating a complete real-time public
-transportation solution by setting up a Microsoft Fabric workspace,
-deploying ingestion and analytics components, configuring security, and
-publishing a Rayfin-based Fabric App. The final outcome is a fully
-functional application capable of visualizing and analyzing live public
-transportation data using Microsoft Fabric services
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image72.png)
+
+1. In the Fabric portal, expand the **Rayfin-Fabric@lab.LabInstance.Id** workspace, and then select the helsinki-public-transport app from the workspace navigation pane to open the deployed application and verify that it loads successfully.
+
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image75.png)
+
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image76.png)
+
+
+### Task 7: Clean up resources
+
+1. Select your workspace, the **Rayfin_Fabric@lab.LabInstance.Id** from the left-hand navigation menu. It opens the workspace item view.
+
+1. Select the ... option under the workspace name and select **Workspace settings**.
+
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image77.png)
+
+1. Navigate to the bottom of the General tab and select **Remove this workspace**.
+
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image78.png)
+
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image79.png)
+
+    ![](https://raw.githubusercontent.com/technofocus-pte/msfbrcryfndepth/refs/heads/main/Cloud%20slice/Labguides/Usecase%203/media/image80.png)
+
+
+## Summary
+
+This usecase guides users through creating a complete real-time public transportation solution by setting up a Microsoft Fabric workspace, deploying ingestion and analytics components, configuring security, and publishing a Rayfin-based Fabric App. The final outcome is a fully functional application capable of visualizing and analyzing live public transportation data using Microsoft Fabric services
