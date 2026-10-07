@@ -210,7 +210,6 @@ After completing this lab, you will be able to:
 
 ![](./media/image24.png)
 
-**Note:** Run all the remaining commands in this terminal, from the **to-do-app** folder.
 
 ### Task 2: Understand the project layout
 
