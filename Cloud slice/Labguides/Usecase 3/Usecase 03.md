@@ -372,8 +372,11 @@ The app queries the semantic model directly from the browser through the Power B
 ### Task 3: Configure the production environment file
 
 1.  In the VS Code terminal, go back to the app folder:
-
-    +++cd ..\..+++
+```
+cd ..\..
+$datasetId = "<add dataset-id>"
+echo $env:FABRIC_WORKSPACE_ID
+```
 
 2.  Create the **.env.production.local** file. Replace the placeholders with the **dataset ID** (Exercise 2, Task 3), the **client ID** (Task 1), and your **tenant ID**:
 
@@ -390,8 +393,9 @@ VITE_PBI_TENANT_ID=<tenant-id>
 **Note:** Vite builds these values into the production app. If any value is missing or wrong, the app can't query the semantic model.
 
 3.  Point the app's semantic-model connector at your workspace and semantic model. In **rayfin/rayfin.yml**, the **transitModel** connector ships with placeholder IDs (00000000-…). Replace \<dataset-id\> with the dataset ID from Exercise 2, Task 3, and run:
-
-    +++(Get-Content rayfin\rayfin.yml) -replace 'workspaceId: 00000000-0000-0000-0000-000000000000', "workspaceId: $env:FABRIC_WORKSPACE_ID" -replace 'itemId: 00000000-0000-0000-0000-000000000000', "itemId: <dataset-id>" | Set-Content rayfin\rayfin.yml+++
+```
+(Get-Content rayfin\rayfin.yml) -replace 'workspaceId: 00000000-0000-0000-0000-000000000000', "workspaceId: $env:FABRIC_WORKSPACE_ID" -replace 'itemId: 00000000-0000-0000-0000-000000000000', "itemId: <dataset-id>" | Set-Content rayfin\rayfin.yml
+```
 
 4.  Verify that **workspaceId** shows your workspace ID and **itemId** shows your dataset ID:
 
