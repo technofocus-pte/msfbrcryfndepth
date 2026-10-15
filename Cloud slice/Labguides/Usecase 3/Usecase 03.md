@@ -401,11 +401,6 @@ VITE_PBI_TENANT_ID=<tenant-id>
 
 Select-String -Path rayfin\rayfin.yml -Pattern "workspaceId|itemId"
 ```
-
-4.  Verify that **workspaceId** shows your workspace ID and **itemId** shows your dataset ID:
-
-    +++Select-String -Path rayfin\rayfin.yml -Pattern "workspaceId|itemId"+++
-
 **Important:** Don't skip this step. Without it, **npm run dev** and **npx rayfin up** fail with **Semantic-model connector 'FabricSemanticModel' (key 'transitModel') declares a missing or invalid Config.ItemId**. If \$env:FABRIC_WORKSPACE_ID is empty, set it again first (Exercise 1, Task 4).
 
 ### Task 4: Verify the back end
