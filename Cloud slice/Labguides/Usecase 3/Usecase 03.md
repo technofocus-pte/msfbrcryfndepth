@@ -514,9 +514,9 @@ npx rayfin up --workspace-id <workspace-id> --tenant <tenant-id> -y
 ![](./media/image62.png)
 
 2.  Rebuild and redeploy the app:
-
-    +++npx rayfin up --workspace-id <workspace-id> --tenant <tenant-id> -y+++
-
+```
+npx rayfin up --workspace-id <workspace-id> --tenant <tenant-id> -y
+```
 ![](./media/image63.png)
 
 3.  Verify that the output shows **Redeployment detected - reusing Rayfin item** and ends with **Your app is live at:** and the hosting URL.
