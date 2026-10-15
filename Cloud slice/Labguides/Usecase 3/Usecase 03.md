@@ -474,9 +474,9 @@ Select-String -Path rayfin\rayfin.yml -Pattern "workspaceId|itemId"
 ### Task 2: Deploy the app to Fabric
 
 1.  In the VS Code terminal, press **Ctrl + C** to stop the dev server. Deploy the app. Replace the placeholders with your workspace ID and tenant ID:
-
-    +++npx rayfin up --workspace-id <workspace-id> --tenant <tenant-id> -y+++
-
+```
+npx rayfin up --workspace-id <workspace-id> --tenant <tenant-id> -y
+```
 ![](./media/image56.png)
 
 2.  Wait for the deployment to finish. Copy the URL after **Your app is live at:** (it ends in **.webapp.fabricapps.net**) and save it in Notepad as the **hosting URL**.
