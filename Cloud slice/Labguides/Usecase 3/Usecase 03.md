@@ -394,7 +394,12 @@ VITE_PBI_TENANT_ID=<tenant-id>
 
 3.  Point the app's semantic-model connector at your workspace and semantic model. In **rayfin/rayfin.yml**, the **transitModel** connector ships with placeholder IDs (00000000-…). Replace \<dataset-id\> with the dataset ID from Exercise 2, Task 3, and run:
 ```
-(Get-Content rayfin\rayfin.yml) -replace 'workspaceId: 00000000-0000-0000-0000-000000000000', "workspaceId: $env:FABRIC_WORKSPACE_ID" -replace 'itemId: 00000000-0000-0000-0000-000000000000', "itemId: <dataset-id>" | Set-Content rayfin\rayfin.yml
+(Get-Content rayfin\rayfin.yml) `
+  -replace 'workspaceId: 00000000-0000-0000-0000-000000000000', "workspaceId: $env:FABRIC_WORKSPACE_ID" `
+  -replace 'itemId: 00000000-0000-0000-0000-000000000000', "itemId: $datasetId" |
+  Set-Content rayfin\rayfin.yml
+
+Select-String -Path rayfin\rayfin.yml -Pattern "workspaceId|itemId"
 ```
 
 4.  Verify that **workspaceId** shows your workspace ID and **itemId** shows your dataset ID:
